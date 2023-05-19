@@ -22,6 +22,17 @@
 <td><button value="调整找怪范围" action="bypass -h htmbypass_bot.configSet maxDistance $distance" width=90 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
 </tr>
 <tr>
+<td width=90 align=LEFT>&nbsp;&nbsp;&nbsp;自动调整找怪范围</td>
+<td>
+	<$switch$>
+	<font color="FFFF00">
+	<$switch$>
+	<button value="%switch%" action="bypass -h htmbypass_bot.autoAdjustRange %switch%" width=30 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+	</font>
+</td>
+	<td ></td>
+</tr>
+<tr>
 <td width=80 align=CENTER>地形高度:<font color=ADFF2F>%findMobMaxHeight% </font></td>
 <td><edit var="zdiff" width=60></td>
 <td><button value="调整地形高度" action="bypass -h htmbypass_bot.configSet maxZDiff $zdiff" width=90 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>

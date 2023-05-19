@@ -1,16 +1,13 @@
 package l2s.gameserver.botscript.bypasshandler;
 
-import l2s.gameserver.core.BotConfig;
-import l2s.gameserver.core.BotEngine;
-import l2s.gameserver.core.DeleteObjectPacket;
-import l2s.gameserver.core.DropItemPacket;
-import l2s.gameserver.core.Geometry;
-import java.awt.Polygon;
-import java.util.Set;
+import l2s.gameserver.botscript.BotControlPage;
+import l2s.gameserver.core.*;
 import l2s.gameserver.handler.bypass.Bypass;
 import l2s.gameserver.model.Player;
 import l2s.gameserver.model.instances.NpcInstance;
 import l2s.gameserver.network.l2.components.IBroadcastPacket;
+
+import java.awt.*;
 
 public class BotPathVisualize
 {
@@ -89,5 +86,17 @@ public class BotPathVisualize
 				player.sendPacket((IBroadcastPacket) new DropItemPacket(i, 57, x2, y, config.getStartZ() + 150, player.getObjectId()));
 			}
 		}
+	}
+	@Bypass(value = "bot.autoAdjustRange")
+	public void autoDistance(Player player, NpcInstance npc, String[] param){
+		BotConfig botConfig = BotEngine.getInstance().getBotConfig(player);
+		//如果是开 就 调为关
+		if (param[0].equalsIgnoreCase("ON")) {
+			botConfig.set_autoAdjustRange(true);
+		}
+		if (param[0].equalsIgnoreCase("OFF")) {
+			botConfig.set_autoAdjustRange(false);
+		}
+		BotControlPage.pathPage(player);
 	}
 }

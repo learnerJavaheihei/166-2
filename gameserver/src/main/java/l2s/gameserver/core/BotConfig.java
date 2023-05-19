@@ -71,6 +71,8 @@ public abstract class BotConfig
 	private transient int _tryTimes;
 	private transient int _deathTime;
 	private transient Map<Integer, Long> _blockTarget = new HashMap<Integer, Long>();
+	// 自动找怪范围 开关
+	private boolean _autoAdjustRange =false;
 
 	public int getFindMobMaxDistance()
 	{
@@ -594,6 +596,14 @@ public abstract class BotConfig
 	public boolean isIdleRest()
 	{
 		return _idleRest;
+	}
+
+	public boolean is_autoAdjustRange() {
+		return _autoAdjustRange;
+	}
+
+	public void set_autoAdjustRange(boolean _autoAdjustRange) {
+		this._autoAdjustRange = _autoAdjustRange;
 	}
 
 	public void setIdleRest(boolean idleRest)

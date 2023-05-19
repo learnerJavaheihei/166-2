@@ -113,25 +113,14 @@ public class BotEngine
 				tasks.put(player.getObjectId(), botThinkTask);
 				player.broadcastCharInfo();
 			}
+            // 是否开启自动调整找怪范围
             BotConfig botConfig = BotEngine.getInstance().getBotConfig(player);
             int Boot_setting_range = botConfig.getFindMobMaxDistance();
             ScheduledFuture<?> increaseAttackRadiusTask = increaseAttackRadiusTasks.get(player.getObjectId());
-            if (increaseAttackRadiusTask==null) {
-                increaseAttackRadiusTask = ThreadPoolManager.getInstance().scheduleAtFixedRate(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (player.isDead() || player.isAttackingNow()) {
-                            botConfig.setFindMobMaxDistance(Boot_setting_range);
-                        }
-                        // 如果上次攻击时间 距离现在超过 5分钟 将最大距离增加 1000 但不能超过最大 4500
-                        if ((System.currentTimeMillis() - player.getLastAttackPacket()) >= 5*60 * 1000) {
-                            botConfig.setFindMobMaxDistance(Math.min(Boot_setting_range + 1000, 4500));
-                        }
-                    }
-                }, 5*60 * 1000, 1000, TimeUnit.MILLISECONDS);
-                increaseAttackRadiusTasks.put(player.getObjectId(),increaseAttackRadiusTask);
-            }
+            if (botConfig.is_autoAdjustRange()) {
+                autoAdjustRange(player, botConfig,increaseAttackRadiusTask,Boot_setting_range);
+            }else
+                increaseAttackRadiusTasks.remove(player.getObjectId());
 
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -146,6 +135,26 @@ public class BotEngine
 			switchLock.unlock();
 		}
 		player.startAbnormalEffect(AbnormalEffect.UNK_222);//給與特殊效果標識
+    }
+
+    private void autoAdjustRange(Player player, BotConfig botConfig, ScheduledFuture<?> increaseAttackRadiusTask, int boot_setting_range) {
+
+        if (increaseAttackRadiusTask==null) {
+            increaseAttackRadiusTask = ThreadPoolManager.getInstance().scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (player.isDead() || player.isAttackingNow()) {
+                        botConfig.setFindMobMaxDistance(boot_setting_range);
+                    }
+                    // 如果上次攻击时间 距离现在超过 5分钟 将最大距离增加 1000 但不能超过最大 4500
+                    if ((System.currentTimeMillis() - player.getLastAttackPacket()) >= 5*60 * 1000) {
+                        botConfig.setFindMobMaxDistance(Math.min(boot_setting_range + 1000, 4500));
+                    }
+                }
+            }, 5*60 * 1000, 1000, TimeUnit.MILLISECONDS);
+            increaseAttackRadiusTasks.put(player.getObjectId(),increaseAttackRadiusTask);
+        }
     }
 
     public void stopTask(Player player)
