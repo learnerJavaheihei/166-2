@@ -1,0 +1,20 @@
+<center>
+当前%name%中拥有%count%个魔法,如下:<BR>
+%skills%
+<br>
+<table>
+<tr>
+<td><button value="编辑" action="bypass -h htmbypass_bot.buff edit %name% 0" width=90 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+<td><button value="删除" action="bypass -h htmbypass_bot.buff del %name%" width=90 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+<td><button value="返回" action="bypass -h htmbypass_bot.buff show" width=90 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+</tr>
+</table>
+<font color=LEVEL>目标管理:(宠物请写宠物的名,如:皇后猫)</font><br1>
+<table>
+<tr>
+<td><edit var="name" width=90></td><td><button value="添加" action="bypass -h htmbypass_bot.buff add_target $name %name%" width=45 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="删除" action="bypass -h htmbypass_bot.buff del_target $name %name%" width=45 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+</tr>
+</table>
+<br>
+%targets%
+</center>

@@ -1,0 +1,105 @@
+<html><head><title>内挂控制台</title>
+<center>
+<table width=270 cellspacing=0>
+	<tr>
+		<td><button value="基本设置" action="bypass -h htmbypass_bot.page main" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+		<td><button value="技能策略" action="bypass -h htmbypass_bot.page fight" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+		<td><button value="打怪范围" action="bypass -h htmbypass_bot.page path" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+		<td><button value="加血加蓝" action="bypass -h htmbypass_bot.page protect" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+		<td><font color="00FF00"><button value="状态魔法" action="bypass -h htmbypass_bot.buff show" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></font></td>
+		<td><font color="FFFF00"><button value="状态道具" action="bypass -h htmbypass_bot.page itemuse" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></font></td>
+		<td><font color="C0FF3E"><button value="休息设定" action="bypass -h htmbypass_bot.page rest" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></font></td>
+		<td><font color="9A32CD"><button value="召唤设定" action="bypass -h htmbypass_bot.page pet" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></font></td>
+	</tr>
+</table>
+<table cellspacing=0 cellpadding=0>
+	<tr>
+		<td width=40>[<font color=00FF00>自</font>]<font color=FF6A6A>HP</font>&lt;</td>
+		<td><combobox var="p2" list="80;70;60;50;40;30;20;15;10;5" width=40></td>
+		<td><font color=ADFF2F>%</font></td>
+		<td><combobox var="sk1" list="%skills%" width=75></td>
+		<td><button value="对自己施展" action="bypass -h htmbypass_bot.configSet sprotect $p2 $sk1" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+		<td width=40>[<font color=AAAA00>队</font>]<font color=FF6A6A>HP</font>&lt;</td>
+		<td><combobox var="p3" list="80;70;60;50;40;30;20;15;10;5" width=40></td>
+		<td><font color=ADFF2F>%</font></td>
+		<td><combobox var="sk2" list="%skills%" width=75></td>
+		<td><button value="对队友施展" action="bypass -h htmbypass_bot.configSet pprotect $p3 $sk2" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+		<td width=40>[<font color=AAAA00>群</font>]<font color=FF6A6A>HP</font>&lt;</td>
+		<td><combobox var="count" list="2人;3人;4人;5人;6人" width=40></td>
+		<td><combobox var="p5" list="80%;70%;60%;50%;40%;30%;20%;15%;10%;5%" width=30></td>
+		<td><combobox var="sk4" list="%skillsGroup%" width=75></td>
+		<td><button value="对队友施展" action="bypass -h htmbypass_bot.configSet gprotect $count $p5 $sk4" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+		<td width=40>[<font color=AAAA00>群</font>]<font color=FF6A6A>HP</font>&lt;</td>
+		<td><combobox var="count2" list="1人;2人;3人;4人;5人" width=40></td>
+		<td><combobox var="p6" list="80%;70%;60%;50%;40%;30%;20%;15%;10%;5%" width=30></td>
+		<td>生命均衡</td>
+		<td><button value="使用" action="bypass -h htmbypass_bot.configSet balance $count2 $p6" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+		<td width=40>[<font color=00FF00>自</font>]<font color=7EC0EE>MP</font>&lt;</td>
+		<td><combobox var="m4" list="30%;20%;10%" width=40></td>
+		<td></td>
+		<td>伊娃祝福</td>
+		<td><button value="使用" action="bypass -h htmbypass_bot.configSet evaPercent $m4" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+		<td width=40>[<font color=AAAA00>队</font>]<font color=7EC0EE>MP</font>&lt;</td>
+		<td><combobox var="m2" list="80;70;60;50;40;30;20" width=40></td>
+		<td><font color=ADFF2F>%</font></td>
+		<td><combobox var="pm" list="%members%" width=75></td>
+		<td><button value="施展回复术" action="bypass -h htmbypass_bot.configSet mprotect $m2 $pm" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+		<td width=40>[<font color=AAAA00>自</font>]<font color=7EC0EE>MP</font>&lt;</td>
+		<td><combobox var="m3" list="45;35;25;15;0" width=40></td>
+		<td><font color=ADFF2F>%</font></td>
+		<td>[%keepMp%]时<font color=FF0000>停止</font>回复术</td>
+		<td><button value="MP保护" action="bypass -h htmbypass_bot.configSet keepMp $m3" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+		<td width=40>[<font color=00AAAA>宠</font>]<font color=7EC0EE>HP</font>&lt;</td>
+		<td><combobox var="p4" list="80;70;60;50;40;30;20" width=40></td>
+		<td><font color=ADFF2F>%</font></td>
+		<td><combobox var="sk3" list="%skills%" width=75></td>
+		<td><button value="对宠物施展" action="bypass -h htmbypass_bot.configSet petprotect $p4 $sk3" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+</table>
+<table width=290>
+	<tr></tr>
+	<tr>
+	<td>HP小于:</td><td><combobox var="limit1" list="50;40;30;20" width=40></td><td>使用极限防御</td><td><button value="设置" action="bypass -h htmbypass_bot.configSet limitDefense $limit1" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+	<tr>
+	<td>HP小于:</td><td><combobox var="limit2" list="50;40;30;20" width=40></td><td>使用极限闪避</td><td><button value="设置" action="bypass -h htmbypass_bot.configSet limitEvade $limit2" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+	</tr>
+</table>
+<table width=290>
+<tr></tr>
+<tr>
+<td background=%isUseRes% width=20 height=16><button value=" " action="bypass -h htmbypass_bot.configSet isUseRes" width=15 height=14 back="" fore=""></td>
+<td>复活</td>
+%priority%
+</tr>
+</table>
+<table width=290>
+<tr></tr>
+<tr>
+<td width=70>回蓝策略</td>
+<td width=70>%mpPolicy%</td>
+<td width=80><combobox var="mho" list="伤势优先;雨露均沾;靠脸吃饭" width=80></td>
+<td><button value="更新" action="bypass -h htmbypass_bot.configSet mpHealOrder $mho" width=70 height=22 back="Button_DF_Down" fore="Button_DF"></td>
+</tr>
+</table>
+<table>
+	%info%
+</table>
+</center>
+</head></html>

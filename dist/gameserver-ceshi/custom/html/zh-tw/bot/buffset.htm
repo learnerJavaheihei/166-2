@@ -1,0 +1,30 @@
+<center>
+<table width=270 cellspacing=0>
+	<tr>
+		<td><button value="基本设置" action="bypass -h htmbypass_bot.page main" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+		<td><button value="技能策略" action="bypass -h htmbypass_bot.page fight" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+		<td><button value="打怪范围" action="bypass -h htmbypass_bot.page path" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+		<td><button value="加血加蓝" action="bypass -h htmbypass_bot.page protect" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+	</tr>
+	<tr>
+		<td><font color="00FF00"><button value="状态魔法" action="bypass -h htmbypass_bot.buff show" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td>
+		<td><font color="FFFF00"><button value="状态道具" action="bypass -h htmbypass_bot.page itemuse" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td>
+		<td><font color="C0FF3E"><button value="休息设定" action="bypass -h htmbypass_bot.page rest" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td>
+		<td><font color="9A32CD"><button value="召唤设定" action="bypass -h htmbypass_bot.page pet" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td>
+	</tr>
+</table>
+辅助技能%skillName%的设定<BR>
+<button value="返回" action="bypass -h htmbypass_bot.buff show" width=50 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+<table>
+<tr><td width=60><font color=FFFF00>全部职业</font></td><td width=60></td><td><font color=00FF00><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% ALL true" width=50 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td><td><font color=FF0000><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% ALL false" width=50 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td></tr>
+<tr><td >骑士职业</td><td >%KNIGHT%</td><td><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% KNIGHT true" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% KNIGHT false" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td></tr>
+<tr><td >斗士职业</td><td >%WARRIOR%</td><td><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% WARRIOR true" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% WARRIOR false" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td></tr>
+<tr><td >盗贼职业</td><td >%ROGUE%</td><td><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% ROGUE true" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% ROGUE false" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td></tr>
+<tr><td >弓箭职业</td><td >%ARCHER%</td><td><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% ARCHER true" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% ARCHER false" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td></tr>
+<tr><td >巫师职业</td><td >%WIZARD%</td><td><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% WIZARD true" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% WIZARD false" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td></tr>
+<tr><td >状态职业</td><td >%ENCHANTER%</td><td><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% ENCHANTER true" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% ENCHANTER false" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td></tr>
+<tr><td >召唤职业</td><td >%SUMMONER%</td><td><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% SUMMONER true" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% SUMMONER false" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td></tr>
+<tr><td >治疗职业</td><td >%HEALER%</td><td><button value="启用" action="bypass -h htmbypass_bot.setbuffTarget %skillId% HEALER true" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td><td><button value="关闭" action="bypass -h htmbypass_bot.setbuffTarget %skillId% HEALER false" width=50 height=20 back="Button_DF_Down" fore="Button_DF"></td></tr>
+</table>
+<button value="帮助" action="bypass -h htmbypass_bot.help 14" width=50 height=20 back="Button_DF_Down" fore="Button_DF">
+</center>

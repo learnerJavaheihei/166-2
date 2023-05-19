@@ -1,0 +1,48 @@
+<html><head><title>路径设置</title>
+<center>
+<table width=270 cellspacing=0>
+	<tr>
+		<td><button value="基本设置" action="bypass -h htmbypass_bot.page main" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+		<td><button value="技能策略" action="bypass -h htmbypass_bot.page fight" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+		<td><button value="打怪范围" action="bypass -h htmbypass_bot.page path" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+		<td><button value="加血加蓝" action="bypass -h htmbypass_bot.page protect" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+	</tr>
+	<tr>
+		<td><font color="00FF00"><button value="状态魔法" action="bypass -h htmbypass_bot.buff show" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td>
+		<td><font color="FFFF00"><button value="状态道具" action="bypass -h htmbypass_bot.page itemuse" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td>
+		<td><font color="C0FF3E"><button value="休息设定" action="bypass -h htmbypass_bot.page rest" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td>
+		<td><font color="9A32CD"><button value="召唤设定" action="bypass -h htmbypass_bot.page pet" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></font></td>
+	</tr>
+</table>
+<table>
+<tr></tr>
+<tr>
+<td width=90 align=CENTER>找怪范围:<font color=ADFF2F>%findMobMaxDistance%</font></td>
+<td><edit var="distance" width=60></td>
+<td><button value="调整找怪范围" action="bypass -h htmbypass_bot.configSet maxDistance $distance" width=90 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+</tr>
+<tr>
+<td width=80 align=CENTER>地形高度:<font color=ADFF2F>%findMobMaxHeight% </font></td>
+<td><edit var="zdiff" width=60></td>
+<td><button value="调整地形高度" action="bypass -h htmbypass_bot.configSet maxZDiff $zdiff" width=90 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+</tr>
+<tr>
+<td width=100 align=CENTER>范围形状:<font color=ADFF2F>%geometry%</font></td>
+<td><combobox var="shape" list="矩形;圆形;多边形" width=60></td>
+<td><button value="调整范围形状" action="bypass -h htmbypass_bot.configSet shape $shape" width=90 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+</tr>
+</table>
+<table>
+<tr>
+<td><button value="更新起点" action="bypass -h htmbypass_bot.configSet startPos" width=70 height=22 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+<td><button value="显示边界" action="bypass -h htmbypass_bot.showPath" width=70 height=22 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+</tr>
+</table>
+多边形设定,请<font color=ADFF2F>顺时针</font>添加顶点坐标<BR1>
+(最多支持16边形)<BR1>
+<button value="添加顶点" action="bypass -h htmbypass_bot.configSet addpoint" width=70 height=22 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+<button value="清空顶点" action="bypass -h htmbypass_bot.configSet clearpoint" width=70 height=22 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF">
+<!-- <button value="设置当前位置为挂机起点" action="bypass -h htmbypass_bot.configSet startPos" width=180 height=22 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"> -->
+<br><img src="L2UI_CH3.herotower_deco" width=256 height=32><br><br>
+</center><br>
+</head></html>

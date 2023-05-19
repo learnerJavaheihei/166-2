@@ -1,0 +1,59 @@
+<html><head><title>内挂控制台</title>
+<center>
+<table width=270 cellspacing=0>
+<tr>
+<td><button value="基本设置" action="bypass -h htmbypass_bot.page main" width=70 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+<td><button value="技能策略" action="bypass -h htmbypass_bot.page fight" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+<td><button value="打怪范围" action="bypass -h htmbypass_bot.page path" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+<td><button value="加血加蓝" action="bypass -h htmbypass_bot.page protect" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></td>
+</tr>
+<tr>
+<td><font color="00FF00"><button value="状态魔法" action="bypass -h htmbypass_bot.buff show" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></font></td>
+<td><font color="FFFF00"><button value="状态道具" action="bypass -h htmbypass_bot.page itemuse" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></font></td>
+<td><font color="C0FF3E"><button value="休息设定" action="bypass -h htmbypass_bot.page rest" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></font></td>
+<td><font color="9A32CD"><button value="召唤设定" action="bypass -h htmbypass_bot.page pet" width=70 height=20 back="Button_DF_Down" fore="Button_DF"></font></td>
+</tr>
+</table>
+<br>
+队伍管理器<br1>
+当前接受<font color=ADFF2F>[%leaderName%]</font>的管理<br1>
+队长启动内挂后将执行自动组队<br1>
+<font color="00FF00">队伍分配请在组队前设定好</font><br1>
+<table>
+<tr>
+<td><button value="列表添加" action="bypass -h htmbypass_bot.add_p list" width=60 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></button></td>
+<td><button value="输入添加" action="bypass -h htmbypass_bot.add_p edit" width=60 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></button></td>
+</tr>
+</table>
+<table>
+<$hide$>
+<tr>
+<td width=60>附近玩家:</td>
+<td width=90><combobox var="name" list="%aroundPlayers%" width=90></td>
+<td><button value="添加队员" action="bypass -h htmbypass_bot.add_p $name addList" width=60 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+<td><button value="指定队长" action="bypass -h htmbypass_bot.auto_accept $name addList" width=60 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+</tr>
+<$middleHide$>
+<tr>
+<td width=60>输入添加:</td>
+<td width=90><edit var="name" width=90 height=16></td>
+<td><button value="添加队员" action="bypass -h htmbypass_bot.add_p $name addEdit" width=60 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+<td><button value="指定队长" action="bypass -h htmbypass_bot.auto_accept $name addEdit" width=60 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+</tr>
+<$hide$>
+</table>
+<table>
+<tr>
+<td width=60>队伍分配:</td>
+<td width=90><combobox var="loot" list="指定;随机;随机含回收;顺序;顺序含回收;" width=90></td>
+<td><button value="设定分配" action="bypass -h htmbypass_bot.configSet loottype $loot" width=60 height=20 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+<td width=60 height=20><font color=LEVEL>%loottype%</font></td>
+</tr>
+<tr></tr>
+<tr>
+</tr>
+</table>
+%list%
+</center>
+</head></html>
+
