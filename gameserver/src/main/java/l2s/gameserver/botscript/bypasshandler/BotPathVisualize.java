@@ -93,9 +93,11 @@ public class BotPathVisualize
 		//如果是开 就 调为关
 		if (param[0].equalsIgnoreCase("ON")) {
 			botConfig.set_autoAdjustRange(true);
+			BotEngine.getInstance().Adjust(player, botConfig);
 		}
 		if (param[0].equalsIgnoreCase("OFF")) {
 			botConfig.set_autoAdjustRange(false);
+			BotEngine.getInstance().Adjust(player, botConfig);
 		}
 		BotControlPage.pathPage(player);
 	}

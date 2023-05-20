@@ -115,12 +115,9 @@ public class BotEngine
 			}
             // 是否开启自动调整找怪范围
             BotConfig botConfig = BotEngine.getInstance().getBotConfig(player);
-            int Boot_setting_range = botConfig.getFindMobMaxDistance();
-            ScheduledFuture<?> increaseAttackRadiusTask = increaseAttackRadiusTasks.get(player.getObjectId());
-            if (botConfig.is_autoAdjustRange()) {
-                autoAdjustRange(player, botConfig,increaseAttackRadiusTask,Boot_setting_range);
-            }else
-                increaseAttackRadiusTasks.remove(player.getObjectId());
+//            int Boot_setting_range = botConfig.getFindMobMaxDistance();
+//            ScheduledFuture<?> increaseAttackRadiusTask = increaseAttackRadiusTasks.get(player.getObjectId());
+            Adjust(player,botConfig);
 
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -137,7 +134,21 @@ public class BotEngine
 		player.startAbnormalEffect(AbnormalEffect.UNK_222);//給與特殊效果標識
     }
 
-    private void autoAdjustRange(Player player, BotConfig botConfig, ScheduledFuture<?> increaseAttackRadiusTask, int boot_setting_range) {
+    public void Adjust(Player player, BotConfig botConfig) {
+        int Boot_setting_range = botConfig.getFindMobMaxDistance();
+        ScheduledFuture<?> increaseAttackRadiusTask = increaseAttackRadiusTasks.get(player.getObjectId());
+        if (botConfig.is_autoAdjustRange()) {
+            autoAdjustRange(player, botConfig, increaseAttackRadiusTask, Boot_setting_range,increaseAttackRadiusTasks);
+        }else{
+            if(increaseAttackRadiusTask != null)
+            {
+                increaseAttackRadiusTask.cancel(false);
+            }
+            increaseAttackRadiusTasks.remove(player.getObjectId());
+        }
+    }
+
+    private void autoAdjustRange(Player player, BotConfig botConfig, ScheduledFuture<?> increaseAttackRadiusTask, int boot_setting_range, Map<Integer, ScheduledFuture<?>> increaseAttackRadiusTasks) {
 
         if (increaseAttackRadiusTask==null) {
             increaseAttackRadiusTask = ThreadPoolManager.getInstance().scheduleAtFixedRate(new Runnable() {
