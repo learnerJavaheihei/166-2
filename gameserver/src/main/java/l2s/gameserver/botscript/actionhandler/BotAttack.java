@@ -201,8 +201,9 @@ public class BotAttack implements IBotActionHandler
 			for(BotSkillStrategy s : config.getAttackStrategy())
 			{
 				useStrategy = s.useMe(actor, monster);
-				if(useStrategy)
-					break;
+				// 去除后 1秒 内 把所有技能都检测使用 可以达到 增快使用技能的频率 目前测试是 3个技能 会将所有技能都使用完全 而且 没有空闲
+//				if(useStrategy)
+//					break;
 			}
 			if(!useStrategy && config.isUsePhysicalAttack())
 			{
