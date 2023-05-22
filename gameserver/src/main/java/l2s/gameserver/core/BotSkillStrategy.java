@@ -58,11 +58,26 @@ public class BotSkillStrategy
 		}
 		else
 		{
-			// 目标状态存在 玩家给予了的技能状态 就不使用该技能
-			if (target.getAbnormalList()!=null && target.getAbnormalList().contains(skillEntry.getId())) {
-				return false;
+			// 判断 技能策略 中 红色技能的使用
+			Skill skill = skillEntry.getTemplate();
+			if(skill instanceof PDam || skill instanceof MDam)
+			{
+				actor.getAI().Cast(skillEntry, target, false, false);
+				return true;
 			}
-			actor.getAI().Cast(skillEntry, target, false, false);
+			else if(skill.getAbnormalTime() > 0)
+			{
+				// 目标状态存在 玩家给予了的技能状态 就不使用该技能
+				if (target.getAbnormalList()!=null && target.getAbnormalList().contains(skillEntry.getId())) {
+					return false;
+				}
+				actor.getAI().Cast(skillEntry, target, false, false);
+			}
+			else if(skill instanceof Drain)
+			{
+				actor.getAI().Cast(skillEntry, target, false, false);
+				return true;
+			}
 			return true;
 		}
 
@@ -132,18 +147,18 @@ public class BotSkillStrategy
 		Skill skill = SkillHolder.getInstance().getSkill(this.getSkillId(), 1);
 		StringBuilder builder = new StringBuilder();
 		String name = skill.getName();
-		String skillColor = "C2C2C2";
+		String skillColor = "C2C2C2";//白
 		if(skill instanceof PDam || skill instanceof MDam)
 		{
-			skillColor = "9AFF9A";
+			skillColor = "9AFF9A";//青
 		}
 		else if(skill.getAbnormalTime() > 0)
 		{
-			skillColor = "BF3EFF";
+			skillColor = "BF3EFF";//紫
 		}
 		else if(skill instanceof Drain)
 		{
-			skillColor = "CD5B45";
+			skillColor = "CD5B45";//棕
 		}
 		builder.append("<td width=85>").append("<font color=").append(skillColor).append(">").append(name).append("</font>").append("</td>");
 		builder.append("<td width=55 align=CENTER><font color=8DB6CD>").append(this.isCheckOnTargetHp() ? "\u76ee\u6807" : "\u81ea\u8eab").append(this.getHpPercentCheck()).append("%").append("</font></td>");
