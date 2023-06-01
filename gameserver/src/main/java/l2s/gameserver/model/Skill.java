@@ -3153,11 +3153,13 @@ public class Skill extends StatTemplate implements SkillInfo, Cloneable
 
 			// 判定是否是同血盟 队友 团队
 
-			Player tPlayer = target.getPlayer();
-			if (tPlayer!=null && tPlayer.getBlockBuffs() && target.isPlayable() && activeChar.isPlayable()) {
-
-				if (tPlayer.getBlockBuffs() && !tPlayer.isInOlympiadMode() && !Skill.getBlockBuffConditions(activeChar, tPlayer)) {
-					continue;
+			// 判定是否是同血盟 队友 团队
+			if (this.getSkillType().equals(SkillType.BUFF)) {
+				Player tPlayer = target.getPlayer();
+				if (tPlayer!=null && tPlayer.getBlockBuffs() && target.isPlayable() && activeChar.isPlayable()) {
+					if (tPlayer.getBlockBuffs() && !tPlayer.isInOlympiadMode() && !Skill.getBlockBuffConditions(activeChar, tPlayer)) {
+						continue;
+					}
 				}
 			}
 
