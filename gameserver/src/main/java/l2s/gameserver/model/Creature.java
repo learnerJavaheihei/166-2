@@ -1,29 +1,7 @@
 package l2s.gameserver.model;
 
-import static l2s.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import l2s.gameserver.data.xml.holder.SkillHolder;
-import l2s.gameserver.skills.*;
 import l2s.commons.collections.LazyArrayList;
 import l2s.commons.geometry.Circle;
 import l2s.commons.geometry.Shape;
@@ -38,6 +16,7 @@ import l2s.gameserver.ai.CtrlEvent;
 import l2s.gameserver.ai.CtrlIntention;
 import l2s.gameserver.ai.PlayableAI.AINextAction;
 import l2s.gameserver.data.xml.holder.LevelBonusHolder;
+import l2s.gameserver.data.xml.holder.SkillHolder;
 import l2s.gameserver.data.xml.holder.TransformTemplateHolder;
 import l2s.gameserver.geodata.GeoEngine;
 import l2s.gameserver.geometry.ILocation;
@@ -58,15 +37,9 @@ import l2s.gameserver.model.actor.instances.creature.AbnormalList;
 import l2s.gameserver.model.actor.listener.CharListenerList;
 import l2s.gameserver.model.actor.recorder.CharStatsChangeRecorder;
 import l2s.gameserver.model.actor.stat.CreatureStat;
-import l2s.gameserver.model.base.ClassLevel;
-import l2s.gameserver.model.base.Element;
-import l2s.gameserver.model.base.ElementalElement;
-import l2s.gameserver.model.base.Sex;
-import l2s.gameserver.model.base.TeamType;
-import l2s.gameserver.model.base.TransformType;
+import l2s.gameserver.model.base.*;
 import l2s.gameserver.model.entity.Reflection;
 import l2s.gameserver.model.entity.events.Event;
-import l2s.gameserver.model.instances.MonsterInstance;
 import l2s.gameserver.model.instances.NpcInstance;
 import l2s.gameserver.model.items.ItemInstance;
 import l2s.gameserver.model.pledge.Clan;
@@ -77,31 +50,10 @@ import l2s.gameserver.network.l2.components.CustomMessage;
 import l2s.gameserver.network.l2.components.IBroadcastPacket;
 import l2s.gameserver.network.l2.components.StatusUpdate;
 import l2s.gameserver.network.l2.components.SystemMsg;
-import l2s.gameserver.network.l2.s2c.ActionFailPacket;
-import l2s.gameserver.network.l2.s2c.AttackPacket;
-import l2s.gameserver.network.l2.s2c.AutoAttackStartPacket;
-import l2s.gameserver.network.l2.s2c.AutoAttackStopPacket;
-import l2s.gameserver.network.l2.s2c.ChangeMoveTypePacket;
-import l2s.gameserver.network.l2.s2c.ExAbnormalStatusUpdateFromTargetPacket;
-import l2s.gameserver.network.l2.s2c.ExRotation;
-import l2s.gameserver.network.l2.s2c.ExShowChannelingEffectPacket;
-import l2s.gameserver.network.l2.s2c.ExTeleportToLocationActivate;
-import l2s.gameserver.network.l2.s2c.FlyToLocationPacket;
+import l2s.gameserver.network.l2.s2c.*;
 import l2s.gameserver.network.l2.s2c.FlyToLocationPacket.FlyType;
-import l2s.gameserver.network.l2.s2c.L2GameServerPacket;
-import l2s.gameserver.network.l2.s2c.MagicSkillCanceled;
-import l2s.gameserver.network.l2.s2c.MagicSkillLaunchedPacket;
-import l2s.gameserver.network.l2.s2c.MagicSkillUse;
-import l2s.gameserver.network.l2.s2c.MoveToPawnPacket;
-import l2s.gameserver.network.l2.s2c.MTLPacket;
-import l2s.gameserver.network.l2.s2c.NpcInfoState;
-import l2s.gameserver.network.l2.s2c.SetupGaugePacket;
-import l2s.gameserver.network.l2.s2c.StatusUpdatePacket;
-import l2s.gameserver.network.l2.s2c.StopMovePacket;
-import l2s.gameserver.network.l2.s2c.SystemMessage;
-import l2s.gameserver.network.l2.s2c.SystemMessagePacket;
-import l2s.gameserver.network.l2.s2c.TeleportToLocationPacket;
 import l2s.gameserver.network.l2.s2c.updatetype.IUpdateTypeComponent;
+import l2s.gameserver.skills.*;
 import l2s.gameserver.skills.skillclasses.Charge;
 import l2s.gameserver.stats.Formulas;
 import l2s.gameserver.stats.Formulas.AttackInfo;
@@ -120,20 +72,26 @@ import l2s.gameserver.templates.npc.NpcTemplate;
 import l2s.gameserver.templates.player.transform.TransformTemplate;
 import l2s.gameserver.templates.skill.EffectTemplate;
 import l2s.gameserver.utils.AbnormalsComparator;
-import l2s.gameserver.utils.ItemFunctions;
-import l2s.gameserver.utils.Log;
 import l2s.gameserver.utils.PositionUtils;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-
 import org.napile.primitive.maps.IntObjectMap;
-import org.napile.primitive.maps.IntLongMap;
 import org.napile.primitive.maps.impl.CHashIntObjectMap;
-import org.napile.primitive.maps.impl.CHashIntLongMap;
 import org.napile.primitive.maps.impl.CTreeIntObjectMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import static l2s.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
 
 public abstract class Creature extends GameObject
 {
@@ -350,7 +308,7 @@ public abstract class Creature extends GameObject
 			return 0.;
 
 		final boolean bow = attacker.getBaseStats().getAttackType() == WeaponType.BOW || attacker.getBaseStats().getAttackType() == WeaponType.CROSSBOW || attacker.getBaseStats().getAttackType() == WeaponType.TWOHANDCROSSBOW;
-		final double resistReflect = 1 - (attacker.getStat().calc(Stats.RESIST_REFLECT_DAM, 0, null, null)); //修復反射抗性 原始後面帶 * 0.01
+		final double resistReflect = 1 - (attacker.getStat().calc(Stats.RESIST_REFLECT_DAM, 0, null, null))*0.01; //修復反射抗性 原始後面帶 * 0.01
 
 		double value = 0.;
 		double chanceValue = 0.;
