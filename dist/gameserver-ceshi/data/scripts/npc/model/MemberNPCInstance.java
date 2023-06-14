@@ -81,7 +81,7 @@ public class MemberNPCInstance extends NpcInstance
 			ItemTemplate.SLOT_BELT,//腰带
 	};
 	public static int[] skillReserve = {
-			11400,11401,11402,11403,11404,51275,51276,51277,51278,51279,51280,51281,51271,51272,51273,1405,51271,51252,51251,51250,51249,51248,5124
+			11400,11401,11402,11403,11404,51275,51276,51277,51278,51279,51280,51281,51271,51272,51273,1405,51271,51252,51251,51250,51249,51248,51247,5124
 	};
 	public MemberNPCInstance(int objectId, NpcTemplate template, MultiValueSet<String> set)
 	{
@@ -1120,6 +1120,12 @@ public class MemberNPCInstance extends NpcInstance
 				player.sendMessage("輸入的參數錯誤");// There are no classes over 136 id.
 				return;
 			}
+			// 如果玩家有 myClassId 的 副职业 则不能装换
+			if (player.getSubClassList().containsClassId(myClassId)) {
+				assert ClassId.valueOf(myClassId) != null;
+				player.sendMessage("你當前存在副職業:"+ClassId.valueOf(myClassId).getName(player)+"不能進行職業轉換");// There are no classes over 136 id.
+				return;
+			}
 			int money = GetLevelMoney(player);
 			if(player.getInventory().getCountOf(88888) < money)
 			{
@@ -1165,7 +1171,7 @@ public class MemberNPCInstance extends NpcInstance
 			//player.sendSkillList();
 			ItemFunctions.deleteItem(player, 88888, money, true); //这样子删除物品有讯息出来
 			int oldId = player.getActiveClassId();
-			String name = "「" + player.getName() + "」通過喬安轉換了自己的職業為: " + player.getClassId().getName(player) + " -> ";
+			String name = "「" + player.getName() + "」通過新魔力服管理員轉換了自己的職業為: " + player.getClassId().getName(player) + " -> ";
 			player.setClassId(myClassId, true);
 			player.broadcastCharInfo();
 			name += player.getClassId().getName(player);
