@@ -1,16 +1,10 @@
 package handler.bbs.custom;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import l2s.gameserver.data.htm.HtmTemplates;
 import l2s.commons.dbutils.DbUtils;
 import l2s.gameserver.Config;
 import l2s.gameserver.dao.CharacterDAO;
 import l2s.gameserver.data.htm.HtmCache;
+import l2s.gameserver.data.htm.HtmTemplates;
 import l2s.gameserver.data.xml.holder.EventHolder;
 import l2s.gameserver.data.xml.holder.PremiumAccountHolder;
 import l2s.gameserver.database.DatabaseFactory;
@@ -25,26 +19,19 @@ import l2s.gameserver.model.instances.PetInstance;
 import l2s.gameserver.model.pledge.Clan;
 import l2s.gameserver.network.authcomm.AuthServerCommunication;
 import l2s.gameserver.network.l2.components.SystemMsg;
-import l2s.gameserver.network.l2.s2c.ExBuySellListPacket;
-import l2s.gameserver.network.l2.s2c.ExShowVariationCancelWindow;
-import l2s.gameserver.network.l2.s2c.ExShowVariationMakeWindow;
-import l2s.gameserver.network.l2.s2c.ExStorageMaxCountPacket;
-import l2s.gameserver.network.l2.s2c.MagicSkillUse;
-import l2s.gameserver.network.l2.s2c.ShowBoardPacket;
-import l2s.gameserver.network.l2.s2c.ShowPCCafeCouponShowUI;
+import l2s.gameserver.network.l2.s2c.*;
 import l2s.gameserver.tables.ClanTable;
-import l2s.gameserver.templates.item.data.ItemData;
 import l2s.gameserver.templates.PremiumAccountTemplate;
-import l2s.gameserver.utils.HtmlUtils;
-import l2s.gameserver.utils.ItemFunctions;
-import l2s.gameserver.utils.Language;
-import l2s.gameserver.utils.Log;
-import l2s.gameserver.utils.TimeUtils;
-import l2s.gameserver.utils.WarehouseFunctions;
-import l2s.gameserver.utils.Util;
-
+import l2s.gameserver.templates.item.data.ItemData;
+import l2s.gameserver.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * @author Bonux
@@ -1109,7 +1096,9 @@ public class CommunityServices extends CustomCommunityHandler
 					}
 
 					// TODO: Вынести конфиг в конфиги коммунити.
-					if(Config.SERVICES_EXPAND_INVENTORY_MAX <= player.getExpandInventory())//修復擴充問題
+					// (又是一个原有修复 但是是有问题的代码，未加初始值 150 在客户端默认的值  player.getExpandInventory() 只是扩展的背包栏数量 而SERVICES_EXPAND_INVENTORY_MAX 的意思是扩展的背包栏上限是 250 客户端本身是背包栏总栏数最大 250 )
+
+					if(Config.SERVICES_EXPAND_INVENTORY_MAX-150 <= player.getExpandInventory())//修復擴充問題
 					{
 						player.sendMessage(player.isLangRus() ? "擴充到最大值，無法再擴充。" : "扩充到最大值，无法再扩充。");
 						player.sendPacket(ShowBoardPacket.CLOSE);

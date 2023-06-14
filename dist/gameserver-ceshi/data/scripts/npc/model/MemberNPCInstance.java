@@ -708,7 +708,7 @@ public class MemberNPCInstance extends NpcInstance
 				}
 
 				// TODO: Вынести конфиг в конфиги коммунити.
-				if (Config.SERVICES_EXPAND_INVENTORY_MAX <= player.getExpandInventory())//修復擴充問題
+				if (Config.SERVICES_EXPAND_INVENTORY_MAX-150 <= player.getExpandInventory())//修復擴充問題
 				{
 					player.sendMessage(player.isLangRus() ? "擴充到最大值，無法再擴充。" : "扩充到最大值，无法再扩充。");
 					player.sendPacket(ShowBoardPacket.CLOSE);
