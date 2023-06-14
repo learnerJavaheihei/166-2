@@ -1,10 +1,7 @@
 package l2s.gameserver.core;
 
 import l2s.gameserver.ThreadPoolManager;
-import l2s.gameserver.botscript.BotConfigDAO;
-import l2s.gameserver.botscript.BotConfigImp;
-import l2s.gameserver.botscript.BotRuntimeChecker;
-import l2s.gameserver.botscript.BotScriptsLoader;
+import l2s.gameserver.botscript.*;
 import l2s.gameserver.model.Player;
 import l2s.gameserver.skills.AbnormalEffect;
 import l2s.gameserver.skills.SkillEntry;
@@ -193,7 +190,7 @@ public class BotEngine
             increaseAttackRadiusTasks.remove(objectId);
 			player.sendMessage("中断辅助 - " + BotEngine.getInstance().getBotConfig(player).getAbortReason());
 			player.broadcastCharInfo();
-			Functions.show("<center>辅助已中断<br1>....</center>", player);
+			Functions.show("<center>辅助已中断<br1>....<br1><br1><table><tr><td><button value=\"重新启动内挂\" action=\"bypass -h htmbypass_bot.start\" width=120 height=20 back=\"Button_DF_Down\" fore=\"Button_DF\"></td></tr></table></center>", player);
 		}
 		finally
 		{
