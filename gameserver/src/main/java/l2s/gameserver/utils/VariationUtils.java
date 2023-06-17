@@ -1,8 +1,5 @@
 package l2s.gameserver.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import l2s.commons.dao.JdbcEntityState;
 import l2s.commons.util.Rnd;
 import l2s.gameserver.data.xml.holder.VariationDataHolder;
@@ -11,12 +8,10 @@ import l2s.gameserver.model.actor.instances.player.ShortCut;
 import l2s.gameserver.model.items.ItemInstance;
 import l2s.gameserver.network.l2.s2c.InventoryUpdatePacket;
 import l2s.gameserver.network.l2.s2c.ShortCutRegisterPacket;
-import l2s.gameserver.templates.item.support.variation.VariationCategory;
-import l2s.gameserver.templates.item.support.variation.VariationFee;
-import l2s.gameserver.templates.item.support.variation.VariationGroup;
-import l2s.gameserver.templates.item.support.variation.VariationInfo;
-import l2s.gameserver.templates.item.support.variation.VariationOption;
-import l2s.gameserver.templates.item.support.variation.VariationStone;
+import l2s.gameserver.templates.item.support.variation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bonux
@@ -62,11 +57,11 @@ public final class VariationUtils
 	{
 		if(!targetItem.canBeAugmented(player))
 		{//古代斗篷精煉實裝--
-			int Id = targetItem.getItemId();
-			if (((Id < 70877) || (Id > 70884)))// 70881~70884 精練過的仍可以再放上去
-			{
-				return false;
-			}
+//			int Id = targetItem.getItemId();
+//			if (((Id < 70877) || (Id > 70884)))// 70881~70884 精練過的仍可以再放上去
+//			{
+//				return false;
+//			}
 		}//--古代斗篷精煉實裝
 
 		if(refinerItem.getTemplate().isBlocked(player, refinerItem))

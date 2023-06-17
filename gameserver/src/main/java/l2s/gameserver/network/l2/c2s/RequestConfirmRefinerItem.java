@@ -48,11 +48,11 @@ public class RequestConfirmRefinerItem extends L2GameClientPacket
 		if(!targetItem.canBeAugmented(activeChar))
 		{
 			int Id = targetItem.getItemId();//古代斗篷精煉實裝--
-			if (((Id < 70877) || (Id > 70884)))// 70881~70884 精練過的仍可以再放上去
-			{
-				activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
-				return;
-			}//--古代斗篷精煉實裝
+//			if (((Id < 70877) || (Id > 70884)))// 70881~70884 精練過的仍可以再放上去
+//			{
+//				activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
+//				return;
+//			}//--古代斗篷精煉實裝
 		}
 
 		if(refinerItem.getTemplate().isBlocked(activeChar, refinerItem))

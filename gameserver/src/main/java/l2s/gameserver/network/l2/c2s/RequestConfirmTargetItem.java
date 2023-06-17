@@ -39,14 +39,14 @@ public class RequestConfirmTargetItem extends L2GameClientPacket
 			return;
 		}
 		int Id = item.getItemId();//古代斗篷精煉實裝--
-		if ((Id >= 70877) && (Id <= 70880))
-		{
-			if (item.getEnchantLevel() < 10)//限制一般斗蓬必需強化超過10才可以放上去。
-			{
-				activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
-				return;
-			}
-		}
+//		if ((Id >= 70877) && (Id <= 70880))
+//		{
+//			if (item.getEnchantLevel() < 10)//限制一般斗蓬必需強化超過10才可以放上去。
+//			{
+//				activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
+//				return;
+//			}
+//		}
 		if ((Id >= 70881) && (Id <= 70884))
 		{
 			if (item.getEnchantLevel() < 15)//限制傳說斗蓬必需強化超過15才可以放上去。
@@ -55,14 +55,19 @@ public class RequestConfirmTargetItem extends L2GameClientPacket
 				return;
 			}
 		}//--古代斗篷精煉實裝
+		if (item.getEnchantLevel() < 10)//限制一般斗蓬必需強化超過10才可以放上去。
+		{
+			activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
+			return;
+		}
 		// check if the item is augmentable
 		if(item.isAugmented())
 		{
-			if (((Id < 70877) || (Id > 70884)))//70881~70884 精練過的仍可以再放上去--
-			{
-				activeChar.sendPacket(SystemMsg.ONCE_AN_ITEM_IS_AUGMENTED_IT_CANNOT_BE_AUGMENTED_AGAIN);
-				return;
-			}//--70881~70884 精練過的仍可以再放上去
+//			if (((Id < 70877) || (Id > 70884)))//70881~70884 精練過的仍可以再放上去--
+//			{
+//				activeChar.sendPacket(SystemMsg.ONCE_AN_ITEM_IS_AUGMENTED_IT_CANNOT_BE_AUGMENTED_AGAIN);
+//				return;
+//			}//--70881~70884 精練過的仍可以再放上去
 		}
 		//TODO: can do better? : currently: using isdestroyable() as a check for hero / cursed weapons
 		else if(!item.canBeAugmented(activeChar))

@@ -4,6 +4,7 @@ import l2s.gameserver.Config;
 import l2s.gameserver.model.Player;
 import l2s.gameserver.model.items.ItemInstance;
 import l2s.gameserver.network.l2.components.SystemMsg;
+import l2s.gameserver.network.l2.s2c.ExVariationCancelResult;
 import l2s.gameserver.network.l2.s2c.ExVariationResult;
 import l2s.gameserver.templates.item.support.variation.VariationFee;
 import l2s.gameserver.utils.NpcUtils;
@@ -80,8 +81,18 @@ public final class RequestRefine extends L2GameClientPacket
 			return;
 		}
 
-		if(VariationUtils.tryAugmentItem(activeChar, targetItem, refinerItem, feeItem, fee.getFeeItemCount()))
+		if(VariationUtils.tryAugmentItem(activeChar, targetItem, refinerItem, feeItem, fee.getFeeItemCount())) {
+			long price = VariationUtils.getRemovePrice(targetItem);
+			if (price < 0)
+				activeChar.sendPacket(new ExVariationCancelResult(0));
+
+			// try to reduce the players adena
+			if (!activeChar.reduceAdena(price, true)) {
+				activeChar.sendPacket(new ExVariationCancelResult(0), SystemMsg.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
+				return;
+			}
 			activeChar.sendPacket(new ExVariationResult(targetItem.getVariation1Id(), targetItem.getVariation2Id(), 1), SystemMsg.THE_ITEM_WAS_SUCCESSFULLY_AUGMENTED);
+		}
 		else
 			activeChar.sendPacket(new ExVariationResult(0, 0, 0), SystemMsg.AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS);
 	}

@@ -5,7 +5,6 @@ import l2s.gameserver.model.Player;
 import l2s.gameserver.model.items.ItemInstance;
 import l2s.gameserver.network.l2.components.SystemMsg;
 import l2s.gameserver.network.l2.s2c.ExPutCommissionResultForVariationMake;
-import l2s.gameserver.templates.item.ItemGrade;
 import l2s.gameserver.templates.item.support.variation.VariationFee;
 import l2s.gameserver.utils.VariationUtils;
 
@@ -56,11 +55,11 @@ public class RequestConfirmGemStone extends L2GameClientPacket
 		if(!targetItem.canBeAugmented(activeChar))
 		{
 			int Id = targetItem.getItemId();//古代斗篷精煉實裝--
-			if (((Id < 70877) || (Id > 70884)))// 70881~70884 精練過的仍可以再放上去
-			{
-				activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
-				return;
-			}//--古代斗篷精煉實裝
+//			if (((Id < 70877) || (Id > 70884)))// 70881~70884 精練過的仍可以再放上去
+//			{
+//				activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
+//				return;
+//			}//--古代斗篷精煉實裝
 		}
 
 		VariationFee fee = VariationUtils.getVariationFee(targetItem, refinerItem);
@@ -76,11 +75,11 @@ public class RequestConfirmGemStone extends L2GameClientPacket
 			return;
 		}
 
-		/*if(_feeItemCount != fee.getFeeItemCount())
+		if(_feeItemCount < fee.getFeeItemCount())
 		{
 			activeChar.sendPacket(SystemMsg.GEMSTONE_QUANTITY_IS_INCORRECT);
 			return;
-		}*/
+		}
 
 		activeChar.sendPacket(new ExPutCommissionResultForVariationMake(_feeItemObjectId, fee.getFeeItemCount()), SystemMsg.PRESS_THE_AUGMENT_BUTTON_TO_BEGIN);
 	}
