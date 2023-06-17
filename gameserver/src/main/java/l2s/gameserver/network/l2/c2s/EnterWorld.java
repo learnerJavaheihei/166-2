@@ -1,17 +1,12 @@
 package l2s.gameserver.network.l2.c2s;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.List;
-import l2s.gameserver.AddExpManager;
+import l2s.commons.dao.JdbcEntityState;
 import l2s.commons.dbutils.DbUtils;
+import l2s.gameserver.AddExpManager;
 import l2s.gameserver.Announcements;
 import l2s.gameserver.Config;
 import l2s.gameserver.dao.MailDAO;
-import l2s.gameserver.data.string.StringsHolder;
 import l2s.gameserver.data.htm.HtmCache;
-import l2s.gameserver.data.xml.holder.PremiumAccountHolder;
 import l2s.gameserver.data.xml.holder.ResidenceHolder;
 import l2s.gameserver.database.DatabaseFactory;
 import l2s.gameserver.instancemanager.CoupleManager;
@@ -22,88 +17,36 @@ import l2s.gameserver.listener.actor.player.OnAnswerListener;
 import l2s.gameserver.listener.actor.player.impl.ReviveAnswerListener;
 import l2s.gameserver.listener.hooks.ListenerHook;
 import l2s.gameserver.listener.hooks.ListenerHookType;
-import l2s.gameserver.model.Creature;
-import l2s.gameserver.model.GameObjectsStorage;
-import l2s.gameserver.model.Party;
-import l2s.gameserver.model.Player;
-import l2s.gameserver.model.Servitor;
-import l2s.gameserver.model.Skill;
-import l2s.gameserver.model.World;
+import l2s.gameserver.model.*;
 import l2s.gameserver.model.actor.CreatureSkillCast;
 import l2s.gameserver.model.actor.instances.creature.Abnormal;
 import l2s.gameserver.model.entity.residence.Castle;
+import l2s.gameserver.model.items.ItemInstance;
 import l2s.gameserver.model.mail.Mail;
-import l2s.gameserver.model.pledge.Clan;
-import l2s.gameserver.model.quest.Quest;
 import l2s.gameserver.network.authcomm.AuthServerCommunication;
 import l2s.gameserver.network.authcomm.gs2as.ChangeAllowedHwid;
 import l2s.gameserver.network.authcomm.gs2as.ChangeAllowedIp;
 import l2s.gameserver.network.l2.GameClient;
-import l2s.gameserver.network.l2.components.ChatType;
 import l2s.gameserver.network.l2.components.HtmlMessage;
 import l2s.gameserver.network.l2.components.SystemMsg;
-import l2s.gameserver.network.l2.s2c.ChangeWaitTypePacket;
-import l2s.gameserver.network.l2.s2c.ClientSetTimePacket;
-import l2s.gameserver.network.l2.s2c.ConfirmDlgPacket;
-import l2s.gameserver.network.l2.s2c.DiePacket;
-import l2s.gameserver.network.l2.s2c.EtcStatusUpdatePacket;
-import l2s.gameserver.network.l2.s2c.ExAdenaInvenCount;
-import l2s.gameserver.network.l2.s2c.ExBasicActionList;
-import l2s.gameserver.network.l2.s2c.ExBasicActionList;
-import l2s.gameserver.network.l2.s2c.ExBR_NewIConCashBtnWnd;
-import l2s.gameserver.network.l2.s2c.ExBR_PremiumStatePacket;
-import l2s.gameserver.network.l2.s2c.ExCastleState;
-import l2s.gameserver.network.l2.s2c.ExChangeMPCost;
-import l2s.gameserver.network.l2.s2c.ExConnectedTimeAndGettableReward;
-import l2s.gameserver.network.l2.s2c.ExEnterWorldPacket;
-import l2s.gameserver.network.l2.s2c.ExGetBookMarkInfoPacket;
-import l2s.gameserver.network.l2.s2c.ExGoodsInventoryChangedNotify;
-import l2s.gameserver.network.l2.s2c.ExOpenMPCCPacket;
-import l2s.gameserver.network.l2.s2c.ExLightingCandleEvent;
-import l2s.gameserver.network.l2.s2c.ExNoticePostArrived;
-import l2s.gameserver.network.l2.s2c.ExPeriodicHenna;
-import l2s.gameserver.network.l2.s2c.ExPCCafePointInfoPacket;
-import l2s.gameserver.network.l2.s2c.ExPledgeCount;
-import l2s.gameserver.network.l2.s2c.ExReceiveShowPostFriend;
-import l2s.gameserver.network.l2.s2c.ExSetCompassZoneCode;
-import l2s.gameserver.network.l2.s2c.ExStorageMaxCountPacket;
-import l2s.gameserver.network.l2.s2c.ExUnReadMailCount;
-import l2s.gameserver.network.l2.s2c.ExUserInfoAbnormalVisualEffect;
-import l2s.gameserver.network.l2.s2c.ExUserInfoCubic;
-import l2s.gameserver.network.l2.s2c.ExUserInfoEquipSlot;
-import l2s.gameserver.network.l2.s2c.ExUserInfoInvenWeight;
-import l2s.gameserver.network.l2.s2c.ExWorldChatCnt;
-import l2s.gameserver.network.l2.s2c.HennaInfoPacket;
-import l2s.gameserver.network.l2.s2c.MagicAndSkillList;
-import l2s.gameserver.network.l2.s2c.MagicSkillLaunchedPacket;
-import l2s.gameserver.network.l2.s2c.MagicSkillUse;
-import l2s.gameserver.network.l2.s2c.ObserverStartPacket;
-import l2s.gameserver.network.l2.s2c.PartySmallWindowAllPacket;
-import l2s.gameserver.network.l2.s2c.PartySpelledPacket;
-import l2s.gameserver.network.l2.s2c.MyPetSummonInfoPacket;
-import l2s.gameserver.network.l2.s2c.PledgeSkillListPacket;
-import l2s.gameserver.network.l2.s2c.QuestListPacket;
-import l2s.gameserver.network.l2.s2c.ReciveVipInfo;
-import l2s.gameserver.network.l2.s2c.RelationChangedPacket;
-import l2s.gameserver.network.l2.s2c.RidePacket;
-import l2s.gameserver.network.l2.s2c.SayPacket2;
-import l2s.gameserver.network.l2.s2c.ShortCutInitPacket;
-import l2s.gameserver.network.l2.s2c.UIPacket;
+import l2s.gameserver.network.l2.s2c.*;
 import l2s.gameserver.network.l2.s2c.updatetype.NpcInfoType;
 import l2s.gameserver.skills.AbnormalEffect;
 import l2s.gameserver.skills.SkillCastingType;
 import l2s.gameserver.skills.SkillEntry;
 import l2s.gameserver.stats.triggers.TriggerType;
-import l2s.gameserver.templates.PremiumAccountTemplate;
 import l2s.gameserver.utils.GameStats;
 import l2s.gameserver.utils.HtmlUtils;
-import l2s.gameserver.utils.ItemFunctions;
-import l2s.gameserver.utils.Language;
 import l2s.gameserver.utils.TradeHelper;
-
 import org.napile.primitive.pair.IntObjectPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Comparator;
+import java.util.List;
 
 public class EnterWorld extends L2GameClientPacket
 {
@@ -137,6 +80,38 @@ public class EnterWorld extends L2GameClientPacket
 
 	public static void onEnterWorld(Player activeChar)
 	{
+		// 检查背包金币
+		List<ItemInstance> itemInstances = activeChar.getInventory().getItemsByItemId(57);
+		if(itemInstances!=null && itemInstances.size() > 1){
+			// 排序-
+			itemInstances.sort(new Comparator<ItemInstance>() {
+				@Override
+				public int compare(ItemInstance item1, ItemInstance item2) {
+					// 从大到小排序
+					return Long.compare(item2.getCount(), item1.getCount());
+				}
+			});
+			ItemInstance maxCountItemInstance = itemInstances.get(0);
+			long sum = 0;
+			boolean deleteSuccess = true;
+			for (ItemInstance itemInstance : itemInstances) {
+				sum += itemInstance.getCount();
+				// 删除其他 的 金币道具
+				if (itemInstance.getObjectId() != maxCountItemInstance.getObjectId()) {
+					if (!activeChar.getInventory().destroyItem(itemInstance)) {
+						deleteSuccess = false;
+						break;
+					}
+				}
+			}
+			// 如果有一个删除失败 不执行
+			if (deleteSuccess) {
+				maxCountItemInstance.setCount(sum);
+				maxCountItemInstance.setJdbcState(JdbcEntityState.UPDATED);
+				activeChar.getInventory().store();
+			}
+		}
+
 		boolean first = activeChar.entering;
 
 		activeChar.sendPacket(ExLightingCandleEvent.DISABLED);

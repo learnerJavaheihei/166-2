@@ -1,11 +1,5 @@
 package l2s.gameserver.model.items;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import l2s.commons.dao.JdbcEntityState;
 import l2s.commons.math.SafeMath;
 import l2s.gameserver.dao.ItemsDAO;
@@ -13,6 +7,12 @@ import l2s.gameserver.idfactory.IdFactory;
 import l2s.gameserver.utils.ItemFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public abstract class ItemContainer
 {
@@ -498,7 +498,7 @@ public abstract class ItemContainer
 					amount += instance.getCount();
 				}
 				// TODO 如果总计数量大于 应该扣除的数量 执行依次扣除的方法
-				if(amount > count){
+				if(amount >= count){
 //					for (int i = 0; i < instances.size(); i++) {
 //						// TODO 如果某一个大于需要扣除的个数 就扣除 那个道具的数量
 //						if (instances.get(i).getCount() > count) {
