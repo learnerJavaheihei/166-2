@@ -20,7 +20,6 @@ import l2s.gameserver.network.l2.s2c.SystemMessagePacket;
 import l2s.gameserver.skills.*;
 import l2s.gameserver.templates.item.WeaponTemplate;
 import l2s.gameserver.templates.item.WeaponTemplate.WeaponType;
-import l2s.gameserver.templates.skill.EffectTemplate;
 import l2s.gameserver.utils.PositionUtils;
 
 public class Formulas
@@ -51,7 +50,7 @@ public class Formulas
 		ElementalElement element = attacker.getActiveElement();
 		if(element != ElementalElement.NONE)
 		{
-			double elementalDamagePower = attacker.getStat().getElementalAttackPower(element) - target.getStat().getElementalDefence(element); // Влияние защиты верно, судя по таблице: https://4gameforum.com/threads/709735/
+			double elementalDamagePower = Math.max(attacker.getStat().getElementalAttackPower(element) - target.getStat().getElementalDefence(element),1); // Влияние защиты верно, судя по таблице: https://4gameforum.com/threads/709735/
 
 			ElementalElement targetElement = target.getActiveElement();
 			if(targetElement == ElementalElement.NONE || element == targetElement)
@@ -592,7 +591,7 @@ public class Formulas
 			if(Config.ENABLE_CRIT_DMG_REDUCTION_ON_MAGIC)
 			{
 				double critDmg = info.damage;
-				critDmg *= 1 + attacker.getStat().getMul(Stats.MAGIC_CRITICAL_DMG, target, skill);
+				critDmg *= 1 + attacker.getStat().getMul(Stats.MAGIC_CRITICAL_DMG, target, skill);// 2+额外加成百分比
 				critDmg += attacker.getStat().getAdd(Stats.MAGIC_CRITICAL_DMG, target, skill);
 				critDmg *= getMCritDamageMode(attacker);
 				critDmg -= info.damage;
