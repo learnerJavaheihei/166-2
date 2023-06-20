@@ -18,7 +18,6 @@ import l2s.gameserver.model.pledge.Clan;
 import l2s.gameserver.network.l2.components.IBroadcastPacket;
 import l2s.gameserver.network.l2.components.SystemMsg;
 import l2s.gameserver.network.l2.s2c.SystemMessagePacket;
-import l2s.gameserver.skills.SkillEntry;
 import l2s.gameserver.templates.item.EtcItemTemplate.EtcItemType;
 import l2s.gameserver.templates.item.ItemTemplate;
 import l2s.gameserver.templates.item.WeaponTemplate.WeaponType;
@@ -873,14 +872,14 @@ public final class ItemFunctions
 				player.sendActionFailed();
 			return false;
 		}
-		// 玩家身上已经有了当前道具使用的效果 则不让使用
-		for (SkillEntry attachedSkill : item.getTemplate().getAttachedSkills()) {
-			int itemSkillId = attachedSkill.getTemplate().getId();
-			if (player.getAbnormalList().contains(itemSkillId)) {
-				player.sendMessage(item.getName()+"状态已经存在，不能重复添加，如需重复添加需要手动取消BUFF后添加。");
-				return false;
-			}
-		}
+//		// 玩家身上已经有了当前道具使用的效果 则不让使用
+//		for (SkillEntry attachedSkill : item.getTemplate().getAttachedSkills()) {
+//			int itemSkillId = attachedSkill.getTemplate().getId();
+//			if (player.getAbnormalList().contains(itemSkillId)) {
+//				player.sendMessage(item.getName()+"状态已经存在，不能重复添加，如需重复添加需要手动取消BUFF后添加。");
+//				return false;
+//			}
+//		}
 		return true;
 	}
 }

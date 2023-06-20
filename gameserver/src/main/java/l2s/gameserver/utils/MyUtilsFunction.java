@@ -142,7 +142,9 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「魔力币」不足 16 个或角色等級小於76級");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(29520, 16);//刪除
+			if (!player.getInventory().destroyItemByItemId(29520, 16)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = RndGetItem();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-1.htm", player);
@@ -179,7 +181,9 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「金幣」不足 369 萬或角色等級小於76級");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(57, 3690000);//刪除
+			if (!player.getInventory().destroyItemByItemId(57, 3690000)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = RndGetItem1();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-2.htm", player);
@@ -215,7 +219,9 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「抽奖券」不足 1 个或角色等級小於76級");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(48400, 1);//刪除
+			if (!player.getInventory().destroyItemByItemId(48400, 1)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = RndGetItem1();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-4.htm", player);
@@ -252,7 +258,9 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「金幣」不足 68 萬");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(57, 680000);//刪除
+			if (!player.getInventory().destroyItemByItemId(57, 680000)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = RndGetItem5();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-9.htm", player);
@@ -277,7 +285,10 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「魔力幣」不足 5 個");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(29520, 5);//刪除
+			if (!player.getInventory().destroyItemByItemId(29520, 5)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
+
 			int itemNum = RndGetItem5();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-9.htm", player);
@@ -302,7 +313,10 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「魔力币」不足 20 个或角色等級小於80級");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(29520, 20);//刪除
+			//刪除
+			if (!player.getInventory().destroyItemByItemId(29520, 20)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = gaojiRndGetItem();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-12.htm", player);
@@ -342,10 +356,12 @@ public final class MyUtilsFunction
 			//bypass -h MyUtils_FreeCreateItems
 			if(player.getInventory().getCountOf(57) <200000000 || player.getLevel() <=79)
 			{
-				player.sendMessage("所需「金幣」不足 2億 或角色等級小於80級");;
+				player.sendMessage("所需「金幣」不足 2億 或角色等級小於80級");
 				return;
 			}
-			player.getInventory().destroyItemByItemId(57, 200000000);//刪除
+			if (!player.getInventory().destroyItemByItemId(57, 200000000)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = gaojiRndGetItem();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-11.htm", player);
@@ -383,7 +399,9 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「金幣」不足 3 萬");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(57, 30000);//刪除
+			if (!player.getInventory().destroyItemByItemId(57, 30000)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = RndGetItem2();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-3.htm", player);
@@ -409,7 +427,9 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「金幣」不足 30 萬");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(57, 300000);//刪除
+			if (!player.getInventory().destroyItemByItemId(57, 300000)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = RndGetItem2();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-5.htm", player);
@@ -435,7 +455,9 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「金幣」不足 300 萬");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(57, 3000000);//刪除
+			if (!player.getInventory().destroyItemByItemId(57, 3000000)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = RndGetItem2();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-6.htm", player);
@@ -461,7 +483,9 @@ public final class MyUtilsFunction
 				player.sendMessage("所需「魔力币」不足 10 个");;
 				return;
 			}
-			player.getInventory().destroyItemByItemId(29520, 10);//刪除
+			if (!player.getInventory().destroyItemByItemId(29520, 10)) {
+				player.sendMessage("扣除失败，请联系管理员！");
+			}
 			int itemNum = RndGetItem2();;
 			ItemInstance item = ItemFunctions.createItem(itemNum);
 			String html = HtmCache.getInstance().getHtml("merchant/34087-7.htm", player);

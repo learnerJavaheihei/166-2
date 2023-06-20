@@ -1,14 +1,16 @@
 package npc.model;
 
-import bosses.AnakimManager;
-import bosses.LilithManager;
-import bosses.SevenSignsRaidManager;
+import java.util.StringTokenizer;
+
 import l2s.commons.collections.MultiValueSet;
+import l2s.gameserver.geometry.Location;
 import l2s.gameserver.model.Player;
 import l2s.gameserver.model.instances.NpcInstance;
 import l2s.gameserver.templates.npc.NpcTemplate;
 
-import java.util.StringTokenizer;
+import bosses.AnakimManager;
+import bosses.LilithManager;
+import bosses.SevenSignsRaidManager;
 
 /**
  * @author Bonux

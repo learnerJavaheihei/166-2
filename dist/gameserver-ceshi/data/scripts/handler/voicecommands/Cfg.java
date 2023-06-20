@@ -49,6 +49,7 @@ public class Cfg extends ScriptVoiceCommandHandler
 							activeChar.setNotShowTraders(false);
 							activeChar.unsetVar(Player.NO_TRADERS_VAR);
 						}
+
 					if(param[0].equalsIgnoreCase("useBlockBuffs@"))
 						if(param[1].equalsIgnoreCase("1"))
 						{
@@ -259,14 +260,22 @@ public class Cfg extends ScriptVoiceCommandHandler
 			activeChar.setVar("useBlockBuff@",0);
 			dialog = dialog.replace("<?value_blockBuff?>", "0");
 			dialog = dialog.replace("<?value_name_blockBuff?>", "开启");
-		}else if (useBlockBuffs != null && useBlockBuffs.equals("0")) {
-		dialog = dialog.replace("<?value_blockBuff?>", "0");
-		dialog = dialog.replace("<?value_name_blockBuff?>", "开启");
+		}if (useBlockBuffs != null && useBlockBuffs.equals("0")) {
+			dialog = dialog.replace("<?value_blockBuff?>", "0");
+			dialog = dialog.replace("<?value_name_blockBuff?>", "开启");
 		}
 		else {
 			dialog = dialog.replace("<?value_name_blockBuff?>", "关闭");
 		}
 
+		if(activeChar.isGM())
+		{
+			dialog = dialog.replace("<$GM$>", "<tr><td width=2></td><td width=160>降級:</td><td width=100 align=center><button width=90 height=20 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\" action=\"bypass -h MyUtils_DownLevel\" value=\"降一級\"></td></tr>");
+		}
+		else
+		{
+			dialog = dialog.replace("<$GM$>", "");
+		}
 		Functions.show(dialog, activeChar);
 
 		return true;

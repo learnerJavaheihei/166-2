@@ -1,16 +1,10 @@
 package npc.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import handler.bbs.custom.BBSConfig;
 import l2s.commons.collections.MultiValueSet;
-import l2s.gameserver.Announcements;
 import l2s.gameserver.Config;
 import l2s.gameserver.data.htm.HtmCache;
 import l2s.gameserver.data.htm.HtmTemplates;
-import l2s.gameserver.model.GameObject;
 import l2s.gameserver.model.Player;
 import l2s.gameserver.model.base.ClassId;
 import l2s.gameserver.model.base.Experience;
@@ -21,6 +15,10 @@ import l2s.gameserver.network.l2.components.SystemMsg;
 import l2s.gameserver.templates.npc.NpcTemplate;
 import l2s.gameserver.utils.HtmlUtils;
 import l2s.gameserver.utils.ItemFunctions;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * @author Bonux
@@ -68,17 +66,17 @@ public class ServerTesterInstance extends NpcInstance
 		}
 		else if(buypassOptions[0].equals("SetbuyLevel"))
 		{
-			if(player.getLevel() >= 72 || player.getInventory().getCountOf(88888) < 150)
+			if(player.getLevel() >= 80 || player.getInventory().getCountOf(88888) < 150)
 			{
-				player.sendMessage("所需「讚助幣」不足 150 个或角色等級大於72級");
+				player.sendMessage("所需「讚助幣」不足 150 个或角色等級大於80級");
 				return;
 			}
-			else if(buypassOptions.length == 2 && player.getLevel() < 72 && player.getInventory().getCountOf(88888) >= 150)
+			else if(buypassOptions.length == 2 && player.getLevel() < 80 && player.getInventory().getCountOf(88888) >= 150)
 			{
 				int level = Integer.parseInt(buypassOptions[1]);
 				player.getInventory().destroyItemByItemId(88888, 150);//刪除
 				setLevel(player, level);
-				player.sendMessage("已直升你的等級為72級");
+				player.sendMessage("已直升你的等級為80級");
 			}
 		}
 		else if(buypassOptions[0].equals("GiveSP"))

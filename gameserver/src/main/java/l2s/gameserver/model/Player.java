@@ -7477,7 +7477,8 @@ public final class Player extends Playable implements PlayerGroup
 				}
 			}
 		}
-
+		// 保存之前的副职业的元素信息
+		getElementalList().store();
 		SubClass newActiveSub = _subClassList.changeActiveSubClass(subId);
 		if(newActiveSub == null)
 			return false;
@@ -7509,7 +7510,7 @@ public final class Player extends Playable implements PlayerGroup
 
 		getHennaList().restore();
 		getDailyMissionList().restore();
-		getElementalList().store();
+
 		getElementalList().restore();
 
 		EffectsDAO.getInstance().restoreEffects(this);
