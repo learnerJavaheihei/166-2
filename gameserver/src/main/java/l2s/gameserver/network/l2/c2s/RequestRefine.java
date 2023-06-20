@@ -82,7 +82,7 @@ public final class RequestRefine extends L2GameClientPacket
 		}
 
 		if(VariationUtils.tryAugmentItem(activeChar, targetItem, refinerItem, feeItem, fee.getFeeItemCount())) {
-			long price = VariationUtils.getRemovePrice(targetItem);
+			long price = fee.getCancelFee();;
 			if (price < 0)
 				activeChar.sendPacket(new ExVariationCancelResult(0));
 

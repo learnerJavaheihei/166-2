@@ -35,7 +35,8 @@ public final class VariationUtils
 		if(fee == null)
 			return -1;
 
-		return fee.getCancelFee();
+//		return fee.getCancelFee();
+		return 1;// 由于修改了 精炼的方式让其直接继续精炼 去掉 解除的 步骤 这里解除精炼的费用改为 1 金币
 	}
 
 	public static VariationFee getVariationFee(ItemInstance item, ItemInstance stone)
