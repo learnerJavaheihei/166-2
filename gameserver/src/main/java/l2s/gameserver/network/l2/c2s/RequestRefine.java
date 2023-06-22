@@ -80,17 +80,18 @@ public final class RequestRefine extends L2GameClientPacket
 			activeChar.sendPacket(new ExVariationResult(0, 0, 0), SystemMsg.AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS);
 			return;
 		}
+		long price = fee.getCancelFee();;
+		if (price < 0){
+			activeChar.sendPacket(new ExVariationCancelResult(0));
+			return;
+		}
 
+		// try to reduce the players adena
+		if (!activeChar.reduceAdena(price, true)) {
+			activeChar.sendPacket(new ExVariationCancelResult(0), SystemMsg.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
+			return;
+		}
 		if(VariationUtils.tryAugmentItem(activeChar, targetItem, refinerItem, feeItem, fee.getFeeItemCount())) {
-			long price = fee.getCancelFee();;
-			if (price < 0)
-				activeChar.sendPacket(new ExVariationCancelResult(0));
-
-			// try to reduce the players adena
-			if (!activeChar.reduceAdena(price, true)) {
-				activeChar.sendPacket(new ExVariationCancelResult(0), SystemMsg.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
-				return;
-			}
 			activeChar.sendPacket(new ExVariationResult(targetItem.getVariation1Id(), targetItem.getVariation2Id(), 1), SystemMsg.THE_ITEM_WAS_SUCCESSFULLY_AUGMENTED);
 		}
 		else

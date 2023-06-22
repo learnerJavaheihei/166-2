@@ -54,12 +54,13 @@ public class RequestConfirmTargetItem extends L2GameClientPacket
 				activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
 				return;
 			}
-		}//--古代斗篷精煉實裝
-		if (item.getEnchantLevel() < 10)//限制一般斗蓬必需強化超過10才可以放上去。
-		{
-			activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
-			return;
 		}
+//		//--古代斗篷精煉實裝
+//		if (item.getEnchantLevel() < 10)//限制一般斗蓬必需強化超過10才可以放上去。
+//		{
+//			activeChar.sendPacket(SystemMsg.THIS_IS_NOT_A_SUITABLE_ITEM);
+//			return;
+//		}
 		// check if the item is augmentable
 		if(item.isAugmented())
 		{
