@@ -1,21 +1,5 @@
 package l2s.gameserver.model.pledge;
 
-import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TIntHashSet;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import l2s.gameserver.skills.SkillEntryType;
-import org.apache.commons.lang3.StringUtils;
 import l2s.commons.collections.JoinedIterator;
 import l2s.commons.dao.JdbcEntityState;
 import l2s.commons.dbutils.DbUtils;
@@ -29,51 +13,39 @@ import l2s.gameserver.database.DatabaseFactory;
 import l2s.gameserver.database.mysql;
 import l2s.gameserver.instancemanager.clansearch.ClanSearchManager;
 import l2s.gameserver.model.Player;
-import l2s.gameserver.model.Servitor;
 import l2s.gameserver.model.Skill;
 import l2s.gameserver.model.SkillLearn;
 import l2s.gameserver.model.base.AcquireType;
 import l2s.gameserver.model.base.PledgeAttendanceType;
 import l2s.gameserver.model.entity.events.impl.ClanHallAuctionEvent;
-import l2s.gameserver.model.entity.residence.clanhall.AuctionClanHall;
 import l2s.gameserver.model.entity.residence.Castle;
-import l2s.gameserver.model.entity.residence.ClanHall;
 import l2s.gameserver.model.entity.residence.Residence;
 import l2s.gameserver.model.entity.residence.ResidenceType;
+import l2s.gameserver.model.entity.residence.clanhall.AuctionClanHall;
 import l2s.gameserver.model.items.ClanWarehouse;
 import l2s.gameserver.model.items.ItemInstance;
 import l2s.gameserver.network.l2.components.IBroadcastPacket;
 import l2s.gameserver.network.l2.components.SystemMsg;
-import l2s.gameserver.network.l2.s2c.ExNeedToChangeName;
-import l2s.gameserver.network.l2.s2c.ExPledgeBonusMarkReset;
-import l2s.gameserver.network.l2.s2c.ExPledgeBonusUpdate;
-import l2s.gameserver.network.l2.s2c.ExPledgeCount;
-import l2s.gameserver.network.l2.s2c.L2GameServerPacket;
-import l2s.gameserver.network.l2.s2c.JoinPledgePacket;
-import l2s.gameserver.network.l2.s2c.PledgeReceiveSubPledgeCreated;
-import l2s.gameserver.network.l2.s2c.PledgeShowInfoUpdatePacket;
-import l2s.gameserver.network.l2.s2c.PledgeShowMemberListAllPacket;
-import l2s.gameserver.network.l2.s2c.PledgeShowMemberListAddPacket;
-import l2s.gameserver.network.l2.s2c.PledgeShowMemberListDeleteAllPacket;
-import l2s.gameserver.network.l2.s2c.PledgeShowMemberListUpdatePacket;
-import l2s.gameserver.network.l2.s2c.PledgeSkillListPacket;
-import l2s.gameserver.network.l2.s2c.PledgeSkillListAddPacket;
-import l2s.gameserver.network.l2.s2c.PledgeStatusChangedPacket;
-import l2s.gameserver.network.l2.s2c.SystemMessagePacket;
+import l2s.gameserver.network.l2.s2c.*;
 import l2s.gameserver.skills.SkillEntry;
+import l2s.gameserver.skills.SkillEntryType;
 import l2s.gameserver.tables.ClanTable;
-import l2s.gameserver.templates.item.ItemTemplate;
 import l2s.gameserver.utils.Log;
 import l2s.gameserver.utils.PlayerUtils;
 import l2s.gameserver.utils.PledgeBonusUtils;
 import l2s.gameserver.utils.SiegeUtils;
-
+import org.apache.commons.lang3.StringUtils;
 import org.napile.primitive.maps.IntObjectMap;
 import org.napile.primitive.maps.impl.CHashIntObjectMap;
 import org.napile.primitive.maps.impl.CTreeIntObjectMap;
 import org.napile.primitive.maps.impl.HashIntObjectMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
 
 public class Clan implements Iterable<UnitMember>
 {
@@ -1941,7 +1913,8 @@ public class Clan implements Iterable<UnitMember>
 	{
 		if(value <= 0)
 			return;
-
+		if ((_huntingProgress.getValue() + value) >= PledgeBonusUtils.MAX_HUNTING_PROGRESS)
+			return;
 		int oldLevel = PledgeBonusUtils.getHuntingProgressLevel(getHuntingProgress());
 		_huntingProgress.setValue(_huntingProgress.getValue() + value);
 		_huntingProgress.setJdbcState(JdbcEntityState.UPDATED);
