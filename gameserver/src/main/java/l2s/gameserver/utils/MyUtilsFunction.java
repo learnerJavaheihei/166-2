@@ -611,8 +611,8 @@ public final class MyUtilsFunction
 			StringBuilder builder = new StringBuilder();
 			SubClass activeSubClass = player.getActiveSubClass();
 			SubClass baseSubClass = player.getBaseSubClass();
-			html = html.replace("<$currentSubClass$>",HtmlUtils.htmlClassName(activeSubClass.getClassId()));
-			html = html.replace("<$baseSubClass$>",HtmlUtils.htmlClassName(baseSubClass.getClassId()));
+			html = html.replace("<$currentSubClass$>","".equals(HtmlUtils.htmlClassName(activeSubClass.getClassId()))?"未转职":HtmlUtils.htmlClassName(activeSubClass.getClassId()));
+			html = html.replace("<$baseSubClass$>","".equals(HtmlUtils.htmlClassName(baseSubClass.getClassId()))?"未转职":HtmlUtils.htmlClassName(baseSubClass.getClassId()));
 			for (SubClass subClass : player.getSubClassList()) {
 				if (subClass.getClassId() != baseSubClass.getClassId()) {
 					builder.append("\n<tr>\n" +
