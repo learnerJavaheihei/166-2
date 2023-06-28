@@ -8,10 +8,15 @@ import l2s.gameserver.data.htm.HtmTemplates;
 import l2s.gameserver.data.xml.holder.ItemHolder;
 import l2s.gameserver.database.DatabaseFactory;
 import l2s.gameserver.model.Player;
+import l2s.gameserver.model.actor.instances.player.SubClass;
+import l2s.gameserver.model.base.ClassId;
+import l2s.gameserver.model.base.SubClassType;
 import l2s.gameserver.model.items.ItemInstance;
 import l2s.gameserver.network.l2.components.HtmlMessage;
 import l2s.gameserver.network.l2.s2c.MagicSkillUse;
 import l2s.gameserver.network.l2.s2c.SystemMessage;
+import l2s.gameserver.skills.SkillEntry;
+import l2s.gameserver.skills.SkillEntryType;
 import l2s.gameserver.templates.item.ItemTemplate;
 import l2s.gameserver.utils.Transaction.TransactionBankCount;
 import l2s.gameserver.utils.Transaction.TransactionBankDao;
@@ -40,6 +45,21 @@ public final class MyUtilsFunction
 			{ "30", "88823,1", "85", "999" },//這一個是鎖引3
 			{ "90", "88824,1", "85", "999" },//這一個是鎖引4
 			{ "15", "88889,1;70754,3;71124,3;90138,5;90963,3", "85", "1" },//這一個是鎖引5
+	};
+	// 被动技能列表
+	private static final Integer[] passiveSkills = {60175,60176,60177,60178,60179,60180,60181,60182,60183};
+	// 副职业对照技能
+	private static final Integer[][] assistantClassIdToSkill= {
+			// 前面是职业 ， 最后一个是对应的技能 -1仅为填充结构 没有任何意义
+            { 90, 91, 99, 106, 60175},//骑士
+			{ 88, 89, 113, 114, 60176},
+			{ 117, 118, -1, -1, 60177},
+			{ 93, 101, 108, -1, 60178},
+			{ 92, 102, 109, -1, 60179},//弓手
+			{ 95, 94, 103, 110, 60180},
+			{ 96, 104, 111, -1, 60181},
+			{ 97, 98, 105, 112, 60182},
+			{ 100, 107, 116, 115, 60183},
 	};
 	private static final int MemberConis = 88888;//會員幣編號
 	public static void onBypassFeedback(Player player,String inputString)
@@ -584,7 +604,194 @@ public final class MyUtilsFunction
 			if(vch != null)
 				vch.useVoicedCommand("cfg", player, ""); */
 		}//降SP设定
+		else if("baseClassChange".equals(inputString))
+		{
+			HtmTemplates htm = HtmCache.getInstance().getTemplates("member/baseClassChange.htm", player);
+			String html = htm.get(0);
+			StringBuilder builder = new StringBuilder();
+			SubClass activeSubClass = player.getActiveSubClass();
+			SubClass baseSubClass = player.getBaseSubClass();
+			html = html.replace("<$currentSubClass$>",HtmlUtils.htmlClassName(activeSubClass.getClassId()));
+			html = html.replace("<$baseSubClass$>",HtmlUtils.htmlClassName(baseSubClass.getClassId()));
+			for (SubClass subClass : player.getSubClassList()) {
+				if (subClass.getClassId() != baseSubClass.getClassId()) {
+					builder.append("\n<tr>\n" +
+							"\t<td width=80><font color=\"C3FF4F\">"+  HtmlUtils.htmlClassName(subClass.getClassId())+"</font>\n"+
+							"\t</td>\n"+
+							"\t<td width=80><font color=\"C3FF4F\">等级："+ subClass.getLevel()+"</font>\n"+
+							"\t</td>\n"+
+							"\t<td width=130>\n"+
+							"<button value=\"切换为主职业\" action=\"bypass -h MyUtils baseClassChange_do "+subClass.getClassId()+" back=\"l2ui_ct1.Button_DF_Msn_down\" width=98 height=25 fore=\"l2ui_ct1.Button_DF_Msn\"/>"+
+							"\t</td>\n"+
+							"</tr>");
+				}
+			}
+			if (!player.getSubClassList().haveSubClasses()) {
+				html = html.replace("<$content$>","<tr><td></td></tr>");
+			}else {
+				html = html.replace("<$content$>",builder.toString());
+			}
+			sendHtmlMessage(player, html);
+		}
+		else if(inputString.startsWith("baseClassChange_do"))
+		{
+			String[] split = inputString.split(" ");
+			if (split.length < 2) {
+				return;
+			}
+			if (player.isDead()) {
+				return;
+			}
+			if (player.isSitting()) {
+				return;
+			}
+			if (player.isInOlympiadMode()) {
+				return;
+			}
+			if (!player.getInventory().destroyItemByItemId(MemberConis,300)) {
+				player.sendMessage("你的赞助币不足");
+				onBypassFeedback(player,"baseClassChange");
+				return;
+			}
+			String wouldChangeSubclass = split[1];
+			SubClass oldBaseSubClass = player.getBaseSubClass();
+			try {
+				int wouldChangeSubclassId = Integer.parseInt(wouldChangeSubclass);
+				if (wouldChangeSubclassId != player.getBaseClassId()) {
+					player.getSubClassList().getByClassId(player.getBaseClassId()).setType(SubClassType.SUBCLASS);
+					player.getSubClassList().getByClassId(wouldChangeSubclassId).setType(SubClassType.BASE_CLASS);
+					player.storeCharSubClasses();
+					player.getSubClassList().restore();
+				}
+				// 删除所有被动技能
+				for (int i = 0; i < passiveSkills.length; i++) {
+					player.removeSkill(passiveSkills[i],true);
+				}
+				player.sendSkillList();
+				player.sendMessage("成功将主职业「"+ClassId.valueOf(oldBaseSubClass.getClassId()).getName(player)+"」切换成「"+ClassId.valueOf(player.getBaseClassId()).getName(player)+"」");
+			}catch (Exception e){
+				_log.error(e.getMessage());
+			}finally {
+				onBypassFeedback(player,"baseClassChange");
+			}
+		}
+		else if("assistantClassSkill".equalsIgnoreCase(inputString))
+		{
+			HtmTemplates htm = HtmCache.getInstance().getTemplates("member/assistantClassSkill.htm", player);
+			String html = htm.get(0);
+			if (!player.getSubClassList().haveSubClasses()) {
+				html = html.replace("<$content$>","<tr><td>你当前没有副职业</td></tr>");
+			}
+			StringBuilder builder = new StringBuilder();
+			try{
+				for (SubClass subClass : player.getSubClassList()) {
+					if (subClass.getClassId()!=player.getBaseClassId()) {
+						int assistantClassSkillId = getAssistantClassSkillId(subClass);
+						if (assistantClassSkillId == -1) {
+							continue;
+						}
+						SkillEntry knownSkill = player.getKnownSkill(assistantClassSkillId);
+						SkillEntry skillEntry = SkillEntry.makeSkillEntry(SkillEntryType.NONE, assistantClassSkillId, 1);
+						builder.append("<tr>\n" +
+								"            <td width=\"80\" align=\"center\" valign=\"center\">"+HtmlUtils.htmlClassName(subClass.getClassId())+"</td>\n" +
+								"            <td width=\"80\" align=\"center\" valign=\"center\"><img src=\""+skillEntry.getTemplate().getIcon()+"\" width=32 height=32><br>"+skillEntry.getTemplate().getName()+"</td>\n" +
+								"            <td width=\"80\" align=\"center\" valign=\"center\">" );
+						if (knownSkill == null && (subClass.getLevel()==86)) {
+							builder.append("<button align=\"center\" valign=\"center\" value=\"学习\" action=\"bypass -h MyUtils assistantClassSkill_add "+skillEntry.getTemplate().getId()+"\" back=\"l2ui_ct1.Button_DF_Msn_down\" width=50 height=20 fore=\"l2ui_ct1.Button_DF_Msn\"/>");
+						}else if(knownSkill == null && (subClass.getLevel()<86)){
+							builder.append("等级不足");
+						}else {
+							builder.append("已学习");
+						}
+						builder.append("</td></tr>");
+					}
+				}
+			}finally {
+				html = html.replace("<$content$>",builder.toString());
+				sendHtmlMessage(player,html);
+			}
+		}
+		else if(inputString.startsWith("assistantClassSkill_add")){
+			String[] split = inputString.split(" ");
+			if(split.length<2){
+				onBypassFeedback(player,"assistantClassSkill");
+				return;
+			}
+			String addSkill = split[1];
+			if (player.getClassId().getId() != player.getBaseClassId()) {
+				player.sendMessage("非主职业不能学习副职业被动技能.");
+				onBypassFeedback(player,"assistantClassSkill");
+				return;
+			}
+			boolean learnable = false;
+			try{
+				int addSkillId = Integer.parseInt(addSkill);
+				// 特殊条件 判断
+				if (addSkillId==60177 || addSkillId == 60180) {
+					if (specialLearnable(addSkillId,player)) {
+						learnable = true;
+					}
+				}else {
+					learnable = true;
+				}
+
+				if (learnable) {
+					SkillEntry knownSkill = player.getKnownSkill(addSkillId);
+					if (knownSkill != null) {
+						player.sendMessage("你已学习过该技能");
+						onBypassFeedback(player,"assistantClassSkill");
+						return;
+					}
+					SkillEntry newSkill = SkillEntry.makeSkillEntry(SkillEntryType.NONE, addSkillId, 1);
+					SkillEntry skillEntry = player.addSkill(SkillEntry.makeSkillEntry(SkillEntryType.NONE, addSkillId, 1),true);
+					player.sendSkillList();
+					player.sendMessage("你成功学习新的技能"+newSkill.getName());
+				}else {
+					player.sendMessage("未满足主职业要求,详见副职业技能描述");
+				}
+			}catch (Exception e){
+				_log.error(e.getMessage());
+			}finally {
+				onBypassFeedback(player,"assistantClassSkill");
+			}
+		}
+		else if(inputString.startsWith("assistantSkillDescription")){
+			HtmTemplates htm = HtmCache.getInstance().getTemplates("member/assistantSkillDescription.htm", player);
+			String html = htm.get(0);
+			sendHtmlMessage(player,html);
+		}
 	}
+
+	private static boolean specialLearnable(int addSkillId, Player player) {
+
+		if (addSkillId == 60177) {
+			for (Integer qishi : assistantClassIdToSkill[0]) {
+				if (player.getBaseClassId() == qishi) {
+					return true;
+				}
+			}
+			return false;
+		} else if (addSkillId == 60180) {
+			for (Integer qishi : assistantClassIdToSkill[4]) {
+				if (player.getBaseClassId() == qishi) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
+	}
+	public static int getAssistantClassSkillId(SubClass subClass){
+		for (int i = 0; i < assistantClassIdToSkill.length; i++) {
+			for (int j = 0; j < assistantClassIdToSkill[i].length-1; j++) {
+				if (subClass.getClassId() == assistantClassIdToSkill[i][j]) {
+					return assistantClassIdToSkill[i][assistantClassIdToSkill[i].length-1];
+				}
+			}
+		}
+		return -1;
+	}
+
 	public static void transactionBank(Player player) {
 		HtmTemplates tpls = HtmCache.getInstance().getTemplates("member/transactionBank.htm", player);
 		String html = tpls.get(0);
