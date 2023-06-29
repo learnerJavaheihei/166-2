@@ -1282,8 +1282,8 @@ public class Formulas
 		final int abnormalTime = abnormal.getSkill().getAbnormalTime();
 		final double cancelPower = attacker.getStat().calc(Stats.CANCEL_POWER, 100, null, null);
 		final double cancelResist = target.getStat().calc(Stats.CANCEL_RESIST, 100, null, null);
-
-		int chance = (int) (dispelChance + ((cancelLevel - buffLevel) * 2) + ((abnormalTime / 120) * 0.01 * cancelPower * 0.01 * cancelResist));
+//		int chance = (int) (dispelChance + ((cancelLevel - buffLevel)*2) + ((abnormalTime / 120) * 0.01 * cancelPower * 0.01 * cancelResist));
+		int chance = (int) (dispelChance + ((cancelLevel - buffLevel)) + ((abnormalTime / 120 / 36) * 0.01 * cancelPower * 0.01 * cancelResist));
 		chance = Math.max(Math.min(Config.CANCEL_SKILLS_HIGH_CHANCE_CAP, chance), Config.CANCEL_SKILLS_LOW_CHANCE_CAP);
 
 		boolean result = Rnd.get(100) < chance;
