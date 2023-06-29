@@ -1,17 +1,21 @@
 package npc.model;
 
 import handler.bbs.custom.BBSConfig;
+import handler.bbs.custom.communitybuffer.BuffSkill;
 import l2s.commons.collections.MultiValueSet;
 import l2s.gameserver.Config;
+import l2s.gameserver.ThreadPoolManager;
 import l2s.gameserver.data.htm.HtmCache;
 import l2s.gameserver.data.htm.HtmTemplates;
 import l2s.gameserver.model.Player;
+import l2s.gameserver.model.actor.instances.player.SubClass;
 import l2s.gameserver.model.base.ClassId;
 import l2s.gameserver.model.base.Experience;
 import l2s.gameserver.model.instances.NpcInstance;
 import l2s.gameserver.model.pledge.Clan;
 import l2s.gameserver.network.l2.components.HtmlMessage;
 import l2s.gameserver.network.l2.components.SystemMsg;
+import l2s.gameserver.network.l2.s2c.MagicSkillUse;
 import l2s.gameserver.templates.npc.NpcTemplate;
 import l2s.gameserver.utils.HtmlUtils;
 import l2s.gameserver.utils.ItemFunctions;
@@ -236,6 +240,55 @@ public class ServerTesterInstance extends NpcInstance
 				player.sendPacket(msg);
 				player.sendActionFailed();		
 			}
+		}
+		else if("multExp".equals(buypassOptions[0])){
+			int skillId = 60184;
+			SubClass baseSubClass = player.getBaseSubClass();
+			HtmTemplates htm = HtmCache.getInstance().getTemplates("", player);
+			String fileName = "merchant/40003.htm";
+			String html = htm.get(0);
+			if (player.getAbnormalList().contains(skillId)) {
+				player.sendMessage("你已经领取过多倍经验BUFF,请勿重复领取");
+				showChatWindow(player,fileName,false);
+				return;
+			}
+			if (baseSubClass.getLevel() >= 85) {
+				player.sendMessage("你的主职业超过或者等于「85」级，不能领取");
+				showChatWindow(player,fileName,false);
+				return;
+			}
+			for (SubClass subClass : player.getSubClassList()) {
+				if ((subClass.getClassId()!= player.getBaseClassId()) && (subClass.getLevel() >= 82)) {
+					player.sendMessage("你的副职业"+ClassId.valueOf(subClass.getClassId()).getName(player)+"超过或者等于「82」级，不能领取");
+					showChatWindow(player,fileName,false);
+					return;
+				}
+			}
+			if (!player.getInventory().destroyItemByItemId(88888,10)) {
+				player.sendMessage("你的赞助币不足");
+				showChatWindow(player,fileName,false);
+				return;
+			}
+			BuffSkill buff = BuffSkill.makeBuffSkill(skillId, 1, 1, -1, false);
+			ThreadPoolManager.getInstance().execute(() ->
+			{
+				boolean success = false;
+
+				buff.getSkill().getEffects(player, player, buff.getTimeAssign() * 60 * 1000, buff.getTimeModifier());
+
+				success = true;
+				try
+				{
+					Thread.sleep(20L);
+				}
+				catch (Exception e)
+				{
+				}
+				if(success)
+					player.broadcastPacket(new MagicSkillUse(player, player, skillId, 1, 1, 0));
+			});
+			player.sendMessage("成功领取多倍经验 buff");
+			showChatWindow(player,fileName,false);
 		}
 	}
 	

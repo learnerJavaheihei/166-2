@@ -2,9 +2,11 @@ package npc.model;
 
 import handler.bbs.custom.communitybuffer.BuffSkill;
 import l2s.commons.collections.MultiValueSet;
+import l2s.commons.dbutils.DbUtils;
 import l2s.gameserver.ThreadPoolManager;
 import l2s.gameserver.data.htm.HtmCache;
 import l2s.gameserver.data.xml.holder.SkillHolder;
+import l2s.gameserver.database.DatabaseFactory;
 import l2s.gameserver.model.Player;
 import l2s.gameserver.model.actor.instances.creature.Abnormal;
 import l2s.gameserver.model.instances.NpcInstance;
@@ -12,17 +14,16 @@ import l2s.gameserver.network.l2.components.HtmlMessage;
 import l2s.gameserver.network.l2.s2c.MagicSkillUse;
 import l2s.gameserver.templates.npc.NpcTemplate;
 import l2s.gameserver.utils.ItemFunctions;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-import l2s.commons.dbutils.DbUtils;
-import l2s.gameserver.database.DatabaseFactory;
 /**
  * NPC輔助
  **/
