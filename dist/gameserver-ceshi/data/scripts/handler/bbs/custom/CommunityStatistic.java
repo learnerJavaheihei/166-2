@@ -1,15 +1,5 @@
 package handler.bbs.custom;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import l2s.commons.dbutils.DbUtils;
 import l2s.gameserver.Config;
 import l2s.gameserver.data.htm.HtmCache;
@@ -27,11 +17,16 @@ import l2s.gameserver.model.entity.olympiad.Olympiad;
 import l2s.gameserver.network.l2.s2c.ShowBoardPacket;
 import l2s.gameserver.templates.item.ItemTemplate;
 import l2s.gameserver.utils.Util;
-
 import org.napile.primitive.maps.IntObjectMap;
 import org.napile.primitive.maps.impl.CHashIntObjectMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Bonux
@@ -561,7 +556,8 @@ public class CommunityStatistic extends CustomCommunityHandler
 		stat.name = player.getName();
 		stat.pk = player.getPkKills();
 		stat.pvp = player.getPvpKills();
-		stat.lvl = player.getBaseSubClass() != null ? player.getBaseSubClass().getLevel() : player.getLevel();
+//		stat.lvl = player.getBaseSubClass() != null ? player.getBaseSubClass().getLevel() : player.getLevel();
+		stat.lvl = player.getActiveSubClass().getLevel();
 		stat.online = player.getOnlineTime();
 		stat.adena = player.getInventory().getCountOf(ItemTemplate.ITEM_ID_ADENA);
 		stat.adena += player.getWarehouse().getCountOf(ItemTemplate.ITEM_ID_ADENA);
